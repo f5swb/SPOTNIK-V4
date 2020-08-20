@@ -1,0 +1,42 @@
+#!/bin/bash
+# DTMF 107# Numerique
+# Start DMR mode
+/etc/spotnik/num.sh start
+pkill -f svxbridge.py
+
+# on kill svxbridge 
+
+# on relance alsa
+/etc/init.d/alsa-utils restart
+
+sleep 10
+
+#on kill svxlink et le timersalon
+if pgrep -x svxlink >/dev/null
+then
+    pkill -TERM svxlink
+    pkill -f timersalon
+fi
+
+# Save network
+#echo "" > /etc/spotnik/network
+
+#rm /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+#ln -s /usr/share/svxlink/sounds/fr_FR/NUM/Sc4fm.wav /usr/share/svxlink/sounds/fr_FR/PropagationMonitor/name.wav
+
+# Clear logs
+> /tmp/svxlink.log
+
+sleep 1
+
+# Launch svxlink
+
+svxlink --daemon --logfile=/tmp/svxlink.log --pidfile=/var/run/svxlink.pid --runasuser=root --config=/etc/spotnik/svxlink.num
+sleep 1
+
+sleep 1
+# on lance le script svxbridge qui connecte la room ou tg défini au dessus et on pipe les audios
+/opt/svxbridge/svxbridge.sh
+
+
+

@@ -1,0 +1,42 @@
+#!/bin/sh -e
+#
+# rc.local
+#
+# AFFICHAGE DE L'ADRESSE IP
+_IP=$(hostname -I) || true
+if [ "$_IP" ]; then
+  printf "My IP address is %s\n" "$_IP"
+fi
+#
+#***********************
+#* CM108 Configuration *
+#***********************
+
+# Radio 1 GPIO 17:PTT - GPIO 18:SQUELCH
+# GPIO 17 : PTT
+echo "17" > /sys/class/gpio/export &
+sleep 2
+echo out > /sys/class/gpio/gpio17/direction
+
+# GPIO 18 : SQUELCH
+echo "18" > /sys/class/gpio/export &
+sleep 2
+echo in > /sys/class/gpio/gpio18/direction
+
+
+# DEMARRAGE SERVICES NUM
+/etc/spotnik/num.sh start
+
+sleep 2
+
+# DEMARRAGE SPOTNIK V3.0
+/etc/spotnik/restart
+sleep 3
+
+# DEMARRAGE INTERFACE GUI
+#cd /opt/spotnik/gui
+#make start
+sleep 20
+python3 /opt/spotnik/spotnik2hmi_V2/spotnik2hmi.py ttyAMA0 9600
+
+exit 0
