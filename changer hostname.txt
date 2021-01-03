@@ -1,0 +1,4 @@
+Changer le nom du prompt :
+
+sudo nano /etc/hostname
+sudo nano /etc/hosts

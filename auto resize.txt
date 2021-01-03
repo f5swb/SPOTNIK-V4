@@ -1,0 +1,46 @@
+Modifiez d'abord /boot/cmdline.txt avec nano et ajoutez init=/usr/lib/raspi-config/init_resize.sh à la première (et seule) ligne
+par exemple, cela finira par ressembler à :
+
+dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=PARTUUID=a8fe70f4-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait init=/usr/lib/raspi-config/init_resize.sh
+
+sur une seule et même ligne
+
+ensuite, créer le fichier "/etc/init.d/resize2fs_once"
+
+touch resize2fs_once
+Editer avec nano resize2fs_once
+
+y inserer :
+
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          resize2fs_once
+# Required-Start:
+# Required-Stop:
+# Default-Start: 3
+# Default-Stop:
+# Short-Description: Resize the root filesystem to fill partition
+# Description:
+### END INIT INFO
+. /lib/lsb/init-functions
+case "$1" in
+  start)
+    log_daemon_msg "Starting resize2fs_once"
+    ROOT_DEV=$(findmnt / -o source -n) &&
+    resize2fs $ROOT_DEV &&
+    update-rc.d resize2fs_once remove &&
+    rm /etc/init.d/resize2fs_once &&
+    log_end_msg $?
+    ;;
+  *)
+    echo "Usage: $0 start" >&2
+    exit 3
+    ;;
+esac
+
+puis :
+
+sudo chmod +x /etc/init.d/resize2fs_once
+sudo systemctl enable resize2fs_once
+
+reboot
