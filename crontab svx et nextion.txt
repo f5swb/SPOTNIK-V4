@@ -1,0 +1,10 @@
+*/5 * * * * root pgrep svxlink > /dev/null || { /etc/spotnik/restart.rrf ; }
+
+
+Crontab relais : 
+
+
+30 17 * * * root/etc/spotnik/restart.reg
+30 19 * * * root/etc/spotnik/restart.rrf
+
+* root pgrep spotnik2hmi > /dev/null || { nohup python3 /opt/spotnik/spotnik2hmi_V2/spotnik2hmi.py ttyS1 9600 ; }
