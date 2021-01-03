@@ -1,0 +1,6 @@
+sudo apt-get install sox
+and for be usable with mp3 files 
+sudo apt-get install libsox-fmt-mp3
+Conversion
+Example of conversion of a mp3 file to wav with a rate of 16 kHz 
+sudo sox s9plus.mp3 -r 16k /usr/share/svxlink/sounds/fr_FR/Smeter/s9plus.wav
