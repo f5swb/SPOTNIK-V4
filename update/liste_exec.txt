@@ -1,0 +1,8 @@
+DMRIDUpdateBM.sh
+DMRIDUpdate.sh
+HBIDUpdate.sh
+NXDNHostsupdate.sh
+NXDNIDUpdate.sh
+P25Hostsupdate.sh
+XLXHostsupdate.sh
+YSFHostsupdate.sh
